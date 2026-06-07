@@ -96,6 +96,7 @@ jobs:
         run: |
           cd builds/windows
           zip -r ../../${GAME_NAME}-Windows.zip .
+          ls ../../
 
       - name: Package Linux
         run: |
