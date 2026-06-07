@@ -171,4 +171,4 @@ jobs:
         run: |
           ./butler push \
             ${{env.GAME_NAME}}-Web.zip \
-            your_username/your_game:web
+            kleszcz/godot-template:web
