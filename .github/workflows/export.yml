@@ -30,8 +30,20 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y unzip zip wget
 
+      - name: Cache Godot
+        uses: actions/cache@v4
+        id: godot-cache
+        with:
+          path: |
+            ~/.local/share/godot/export_templates
+            ~/godot
+          key: godot-${{ env.GODOT_VERSION }}
+
       - name: Download Godot
+        if: steps.godot-cache.outputs.cache-hit != 'true'
         run: |
+          mkdir -p ~/godot
+          cd ~/godot
           wget \
             https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-${GODOT_STATUS}/Godot_v${GODOT_VERSION}-${GODOT_STATUS}_linux.x86_64.zip
           unzip Godot_v${GODOT_VERSION}-${GODOT_STATUS}_linux.x86_64.zip
@@ -39,6 +51,7 @@ jobs:
           chmod +x /usr/local/bin/godot
 
       - name: Install Export Templates
+        if: steps.godot-cache.outputs.cache-hit != 'true'
         run: |
           wget \
             https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-${GODOT_STATUS}/Godot_v${GODOT_VERSION}-${GODOT_STATUS}_export_templates.tpz
@@ -64,7 +77,7 @@ jobs:
         run: |
           godot --headless \
             --export-release "Windows Desktop" \
-            builds/windows/$GAME_NAME.exe
+            builds/windows/${{env.GAME_NAME}}.exe
           ls -la builds/windows
 
       - name: Export Linux
