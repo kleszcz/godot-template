@@ -3,7 +3,7 @@ name: Export Godot Builds
 on:
   push:
     branches:
-      - main
+      - master
     tags:
       - 'v*'
 
