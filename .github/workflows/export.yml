@@ -23,6 +23,12 @@ jobs:
         with:
           lfs: true
 
+      - name: Setup Godot Export Templates
+        uses: firebelley/godot-export@v7
+        with:
+          godot-version: 4.6.3
+          export-debug: false
+
       - name: Create build directories
         run: |
           mkdir -p builds/windows
