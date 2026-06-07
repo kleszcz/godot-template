@@ -165,6 +165,8 @@ jobs:
           unzip butler.zip
           chmod +x butler
 
+          ls -la
+
       - name: Push to itch.io
         env:
           BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
