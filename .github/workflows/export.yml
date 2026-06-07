@@ -31,7 +31,7 @@ jobs:
           sudo apt-get install -y unzip zip wget
 
       - name: Cache Godot
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         id: godot-cache
         with:
           path: |
@@ -76,7 +76,6 @@ jobs:
           godot --headless \
             --export-release "Windows Desktop" \
             builds/windows/${{env.GAME_NAME}}.exe
-          ls -la builds/windows
 
       - name: Export Linux
         run: |
@@ -94,7 +93,6 @@ jobs:
         run: |
           cd builds/windows
           zip -r ../../${{env.GAME_NAME}}-Windows.zip .
-          ls ../../
 
       - name: Package Linux
         run: |
@@ -111,18 +109,21 @@ jobs:
         with:
           name: ${{env.GAME_NAME}}-Windows
           path: ${{env.GAME_NAME}}-Windows.zip
+          archive: false
 
       - name: Upload Linux Artifact
         uses: actions/upload-artifact@v7
         with:
           name: ${{env.GAME_NAME}}-Linux
           path: ${{env.GAME_NAME}}-Linux.zip
+          archive: false
 
       - name: Upload Web Artifact
         uses: actions/upload-artifact@v7
         with:
           name: ${{env.GAME_NAME}}-Web
           path: ${{env.GAME_NAME}}-Web.zip
+          archive: false
 
       - name: Create Release
         if: startsWith(github.ref, 'refs/tags/v')
