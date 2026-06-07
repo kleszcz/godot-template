@@ -36,14 +36,12 @@ jobs:
         with:
           path: |
             ~/.local/share/godot/export_templates
-            ~/godot
+            /usr/local/bin/godot
           key: godot-${{ env.GODOT_VERSION }}
 
       - name: Download Godot
         if: steps.godot-cache.outputs.cache-hit != 'true'
         run: |
-          mkdir -p ~/godot
-          cd ~/godot
           wget \
             https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-${GODOT_STATUS}/Godot_v${GODOT_VERSION}-${GODOT_STATUS}_linux.x86_64.zip
           unzip Godot_v${GODOT_VERSION}-${GODOT_STATUS}_linux.x86_64.zip
