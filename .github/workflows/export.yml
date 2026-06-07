@@ -65,6 +65,7 @@ jobs:
           godot --headless \
             --export-release "Windows Desktop" \
             builds/windows/$GAME_NAME.exe
+          ls -la builds/windows
 
       - name: Export Linux
         run: |
