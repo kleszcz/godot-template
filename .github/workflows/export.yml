@@ -138,7 +138,7 @@ jobs:
   # Limits: currently, the itch.io backend will reject builds with a total uncompressed size that exceeds 30GB.
   deploy-web-to-itch:
     needs: export
-    if: startsWith(github.ref, 'refs/tags/v')
+    # if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
 
     steps:
@@ -163,12 +163,12 @@ jobs:
             https://broth.itch.zone/butler/linux-amd64/${{ env.BUTLER_VERSION }}/archive/default
           unzip butler.zip
           chmod +x butler
-          ls -la .
 
       - name: Push to itch.io
         env:
           BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
         run: |
+          ls -la .
           ./butler push \
             ${{env.GAME_NAME}}-Web.zip \
             kleszcz/godot-template:web
