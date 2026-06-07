@@ -145,6 +145,7 @@ jobs:
       - uses: actions/download-artifact@v8
         with:
           name: ${{env.GAME_NAME}}-Web.zip
+          path: ${{env.GAME_NAME}}-Web
 
       - name: Cache Butler
         uses: actions/cache@v5
@@ -170,5 +171,5 @@ jobs:
         run: |
           ls -la .
           ./butler push \
-            ${{env.GAME_NAME}}-Web.zip \
+            ${{env.GAME_NAME}}-Web \
             kleszcz/godot-template:web
