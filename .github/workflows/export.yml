@@ -161,11 +161,9 @@ jobs:
         run: |
           curl -L -o butler.zip \
             https://broth.itch.zone/butler/linux-amd64/${{ env.BUTLER_VERSION }}/archive/default
-
           unzip butler.zip
           chmod +x butler
-
-          ls -la
+          ls -la .
 
       - name: Push to itch.io
         env:
