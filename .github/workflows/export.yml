@@ -14,6 +14,7 @@ env:
   GODOT_VERSION: "4.6.3"
   GODOT_STATUS: "stable"
   GAME_NAME: "MyGame"
+  BUTLER_VERSION: "15.27.0"
 
 jobs:
   export:
@@ -133,33 +134,41 @@ jobs:
             ${{env.GAME_NAME}}-Windows.zip
             ${{env.GAME_NAME}}-Linux.zip
             ${{env.GAME_NAME}}-Web.zip
-# deploy-web-to-itch:
-#   needs: export
-#   if: startsWith(github.ref, 'refs/tags/v')
-#   runs-on: ubuntu-latest
 
-#   steps:
-#     - uses: actions/download-artifact@v4
-#       with:
-#         name: ${{env.GAME_NAME}}-Web
+  # Limits: currently, the itch.io backend will reject builds with a total uncompressed size that exceeds 30GB.
+  deploy-web-to-itch:
+    needs: export
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
 
-#     - name: Unzip Web Build
-#       run: |
-#         mkdir web-build
-#         unzip ${{env.GAME_NAME}}-Web.zip -d web-build
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: ${{env.GAME_NAME}}-Web
 
-#     - name: Install Butler
-#       run: |
-#         curl -L -o butler.zip \
-#           https://broth.itch.zone/butler/linux-amd64/LATEST/archive/default
+      - name: Cache Butler
+        uses: actions/cache@v5
+        id: butler-cache
+        with:
+          path: |
+            butler
+            7z.so
+            libc7zip.so
+          key: butler-${{ env.BUTLER_VERSION }}
 
-#         unzip butler.zip
-#         chmod +x butler
+      - name: Install Butler
+        if: steps.butler-cache.outputs.cache-hit != 'true'
+        run: |
+          curl -L -o butler.zip \
+            https://broth.itch.zone/butler/linux-amd64/${{ env.BUTLER_VERSION }}/archive/default
 
-#     - name: Push to itch.io
-#       env:
-#         BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
-#       run: |
-#         ./butler push \
-#           web-build \
-#           your_username/your_game:web
+          unzip butler.zip
+          chmod +x butler
+
+      - name: Push to itch.io
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+        run: |
+          ./butler push \
+            ${{env.GAME_NAME}}-Web.zip \
+            your_username/your_game:web
