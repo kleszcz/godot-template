@@ -13,7 +13,7 @@ permissions:
 env:
   GODOT_VERSION: "4.6.3"
   GODOT_STATUS: "stable"
-  GAME_NANE: "MyGame"
+  GAME_NAME: "MyGame"
 
 jobs:
   export:
@@ -64,13 +64,13 @@ jobs:
         run: |
           godot --headless \
             --export-release "Windows Desktop" \
-            builds/windows/MyGame.exe
+            builds/windows/${GAME_NAME}.exe
 
       - name: Export Linux
         run: |
           godot --headless \
             --export-release "Linux" \
-            builds/linux/MyGame.x86_64
+            builds/linux/${GAME_NAME}.x86_64
 
       - name: Export Web
         run: |
