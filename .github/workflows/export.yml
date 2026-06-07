@@ -144,7 +144,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v8
         with:
-          name: ${{env.GAME_NAME}}-Web
+          name: ${{env.GAME_NAME}}-Web.zip
 
       - name: Cache Butler
         uses: actions/cache@v5
